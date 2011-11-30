@@ -1,13 +1,12 @@
 
+
 # GitHub3 - NodeJS GitHub API (v3) Wrapper
 
-***
+### Installation
 
 ```bash
 $ npm install github3
 ```
-
-***
 
 ### Example Code (Checkout /tests, same jazz)
 
@@ -33,5 +32,3 @@ github3.getOrgMembers('ingklabs', function(error, members) {
 
 /* EOF */
 ```
-
-***
