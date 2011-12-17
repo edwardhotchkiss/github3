@@ -54,6 +54,26 @@ vows.describe('api tests').addBatch({
       assert.equal(error, null);
       assert.equal(typeof(data), 'object');
     }
+  },
+  // getFollowers
+  'when making a call to getFollowers(edwardhotchkiss,':{
+    topic:function(){ 
+      github3.getFollowers('edwardhotchkiss', this.callback);
+    },
+    'we should receive no errors, and data back':function(error, data) {
+      assert.equal(error, null);
+      assert.equal(typeof(data), 'object');
+    }
+  },
+  // getFollowing
+  'when making a call to getFollowing(edwardhotchkiss,':{
+    topic:function(){ 
+      github3.getFollowing('edwardhotchkiss', this.callback);
+    },
+    'we should receive no errors, and data back':function(error, data) {
+      assert.equal(error, null);
+      assert.equal(typeof(data), 'object');
+    }
   }
 }).export(module);
 
