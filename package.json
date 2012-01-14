@@ -1,8 +1,8 @@
 {
-  "author": "Edward Hotchkiss <e@ingk.com>",
+  "author": "Edward Hotchkiss <edward@edwardhotchkiss.com>",
   "name": "github3",
   "description": "NodeJS GitHub API (v3) Wrapper",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "repository": {
     "type": "git",
     "url": "git://github.com/edwardhotchkiss/github3.git"
