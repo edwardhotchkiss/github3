@@ -2,7 +2,7 @@
   "author": "Edward Hotchkiss <edward@edwardhotchkiss.com>",
   "name": "github3",
   "description": "NodeJS GitHub API (v3) Wrapper",
-  "version": "0.0.5",
+  "version": "0.1.0",
   "repository": {
     "type": "git",
     "url": "git://github.com/edwardhotchkiss/github3.git"
@@ -10,7 +10,7 @@
   "keywords": ["github", "api", "wrapper", "git", "code"],
   "main": "./lib/github3",
   "engines":{
-    "node":">= 0.4.11 < 0.7.0"
+    "node":">= 0.4.11"
   },
   "dependencies": {
     "request":"2.2.5"
