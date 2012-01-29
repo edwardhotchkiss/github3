@@ -6,9 +6,9 @@ var github3 = new require('../lib/github3');
 
 vows.describe('api tests').addBatch({
   // _get
-  'when making a generic _get call to /orgs/ingklabs/public_members':{
+  'when making a generic _get call to /orgs/github/public_members':{
     topic:function(){ 
-      github3._get('/orgs/ingklabs/public_members', this.callback);
+      github3._get('/orgs/github/public_members', this.callback);
     },
     'we should receive no errors, and data back':function(error, data) {
       assert.equal(error, null);
@@ -26,9 +26,9 @@ vows.describe('api tests').addBatch({
     }
   },
   // getOrgMembers
-  'when making a call to getOrgMembers(ingklabs,':{
+  'when making a call to getOrgMembers(github,':{
     topic:function(){ 
-      github3.getOrgMembers('ingklabs', this.callback);
+      github3.getOrgMembers('github', this.callback);
     },
     'we should receive no errors, and data back':function(error, data) {
       assert.equal(error, null);
@@ -141,7 +141,6 @@ vows.describe('api tests').addBatch({
       github3.getWatchers('github3','edwardhotchkiss', this.callback);
     },
     'we should receive no errors, and data back':function(error, data) {
-		console.log(data);
       assert.equal(error, null);	  
       assert.equal(typeof(data), 'object');
     }
@@ -152,7 +151,6 @@ vows.describe('api tests').addBatch({
       github3.getRepository('github3','intabulas', this.callback);
     },
     'we should receive no errors, and data back':function(error, data) {
-   	  console.log(data);
       assert.equal(error, null);	  
       assert.equal(typeof(data), 'object');
     }
