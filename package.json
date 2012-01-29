@@ -6,7 +6,7 @@
     { "name": "Mark Lussier", "email": "mlussier@gmail.com" }
   ],
   "description": "NodeJS GitHub API (v3) Wrapper",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "repository": {
     "type": "git",
     "url": "git://github.com/edwardhotchkiss/github3.git"
