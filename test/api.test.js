@@ -146,6 +146,17 @@ vows.describe('api tests').addBatch({
       assert.equal(typeof(data), 'object');
     }
   },
+  // getRepository
+  'when making a call to getWatchers(github3,intabulas,':{
+    topic:function(){ 
+      github3.getRepository('github3','intabulas', this.callback);
+    },
+    'we should receive no errors, and data back':function(error, data) {
+   	  console.log(data);
+      assert.equal(error, null);	  
+      assert.equal(typeof(data), 'object');
+    }
+  },
   
   
 }).export(module);
