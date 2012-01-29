@@ -94,7 +94,18 @@ vows.describe('api tests').addBatch({
       assert.equal(error, null);
       assert.equal(typeof(data), 'object');
     }
+  },
+  // getBranches
+  'when making a call to getLanguages(github3,edwardhotchkiss,':{
+    topic:function(){ 
+      github3.getBranches('github3','edwardhotchkiss', this.callback);
+    },
+    'we should receive no errors, and data back':function(error, data) {
+      assert.equal(error, null);
+      assert.equal(typeof(data), 'object');
+    }
   }
+  
   
 }).export(module);
 
