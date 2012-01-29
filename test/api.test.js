@@ -135,6 +135,17 @@ vows.describe('api tests').addBatch({
       assert.equal(typeof(data), 'object');
     }
   },
+  // getWatchers
+  'when making a call to getWatchers(github3,edwardhotchkiss,':{
+    topic:function(){ 
+      github3.getWatchers('github3','edwardhotchkiss', this.callback);
+    },
+    'we should receive no errors, and data back':function(error, data) {
+		console.log(data);
+      assert.equal(error, null);	  
+      assert.equal(typeof(data), 'object');
+    }
+  },
   
   
 }).export(module);
