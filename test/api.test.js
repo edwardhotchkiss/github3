@@ -104,7 +104,17 @@ vows.describe('api tests').addBatch({
       assert.equal(error, null);
       assert.equal(typeof(data), 'object');
     }
-  }
+  },
+  // getCollaborators
+  'when making a call to getCollaborators(ShowOffPad,schacon,':{
+    topic:function(){ 
+      github3.getCollaborators('ShowOffPad','schacon', this.callback);
+    },
+    'we should receive no errors, and data back':function(error, data) {
+      assert.equal(error, null);
+      assert.equal(typeof(data), 'object');
+    }
+  },
   
   
 }).export(module);
