@@ -3,7 +3,8 @@
   "author": "Edward Hotchkiss <edward@edwardhotchkiss.com>",
   "contributors":[
     { "name": "Edward Hotchkiss", "email": "edward@edwardhotchkiss.com" },
-    { "name": "Mark Lussier", "email": "mlussier@gmail.com" }
+    { "name": "Mark Lussier", "email": "mlussier@gmail.com" },
+    { "name": "@dolphin278", "github": "https://github.com/dolphin278" }
   ],
   "description": "NodeJS GitHub API (v3) Wrapper",
   "version": "0.2.0",
@@ -14,7 +15,7 @@
   "keywords": ["github", "api", "wrapper", "git", "code"],
   "main": "./lib/github3",
   "engines":{
-    "node":">= 0.4.11"
+    "node":">= 0.4.12"
   },
   "dependencies": {
     "request":"2.2.5"
