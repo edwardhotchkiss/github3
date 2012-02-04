@@ -1,14 +1,15 @@
 
+# GitHub 3 [![Build Status](https://secure.travis-ci.org/edwardhotchkiss/github3.png)](http://travis-ci.org/edwardhotchkiss/github3)
 
-# GitHub3 - NodeJS GitHub API (v3) Wrapper
+> Node.JS GitHub API (v3) Wrapper
 
-## Installation
+### Installation
 
 ```bash
 $ npm install github3
 ```
 
-## Example Code
+### Example Code
 
 ```javascript
 
@@ -36,10 +37,10 @@ github3.getOrgMembers('github', function(error, members) {
 
 ```
 
-## License (MIT)
+### License (MIT)
 
-	Copyright (c) 2011, Edward Hotchkiss.
+	Copyright (c) 2012, Edward Hotchkiss.
 
-## Author: [Edward Hotchkiss][0]
+### Author: [Edward Hotchkiss][0]
 
 [0]: http://edwardhotchkiss.com/
