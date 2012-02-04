@@ -8,7 +8,7 @@
 $ npm install github3
 ```
 
-### Example Code (Checkout /tests, same jazz)
+### Example Code
 
 ```javascript
 
@@ -26,9 +26,8 @@ github3.getUsersWatched('edwardhotchkiss', function(error, watched) {
   console.log(watched);
 });
 
-github3.getOrgMembers('ingklabs', function(error, members) {
+github3.getOrgMembers('github', function(error, members) {
   console.log('members');
 });
 
-/* EOF */
 ```
