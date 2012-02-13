@@ -1,4 +1,17 @@
 
+0.3.0 / 2012-02-12 
+==================
+
+  * [test] fix _get method
+  * Merge pull request #5 from intabulas/master
+  * Added support for using existing oAuth token as an authentication method in addition to basic auth
+  * Merge pull request #4 from intabulas/master
+  * extract the rate limit details from github api responses and make them available
+  * [tests] add travis status indicator to README
+  * [tests] add `travis` config file for CI
+  * [docs, minor] cleanup
+
+
 0.2.0 / 2012-01-29 
 ==================
 

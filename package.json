@@ -7,7 +7,7 @@
     { "name": "@dolphin278", "github": "https://github.com/dolphin278" }
   ],
   "description": "NodeJS GitHub API (v3) Wrapper",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "repository": {
     "type": "git",
     "url": "git://github.com/edwardhotchkiss/github3.git"
