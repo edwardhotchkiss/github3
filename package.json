@@ -7,22 +7,19 @@
     { "name": "@dolphin278", "github": "https://github.com/dolphin278" }
   ],
   "description": "NodeJS GitHub API (v3) Wrapper",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "repository": {
     "type": "git",
     "url": "git://github.com/edwardhotchkiss/github3.git"
   },
-  "keywords": ["github", "api", "wrapper", "git", "code"],
+  "keywords": ["github", "api", "wrapper", "git", "3"],
   "main": "./lib/github3",
-  "engines":{
-    "node":">= 0.4.12"
-  },
+   "engines": { "node":">= 0.6.X < 0.7.0" },
   "dependencies": {
     "request":"2.2.5"
   },
   "devDependencies":{
-    "vows":"0.5.13",
-    "should":"0.3.2"
+    "vows":"0.6.2"
   },
   "scripts": {
     "test": "vows test/*.test.js --spec"

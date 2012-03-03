@@ -37,10 +37,28 @@ github3.getOrgMembers('github', function(error, members) {
 
 ```
 
+### Roadmap to 1.0.0
+
+	* Integrate oAuth Completely
+	* Document fully all methods
+	* Add Examples
+	* Build a non-trivial app with `github3`
+	* Release app on Nodejitsu
+	* Release Github3 v1.0.0
+
 ### License (MIT)
 
 Copyright (c) 2011, Edward Hotchkiss.
 
-### Author: [Edward Hotchkiss][0]
+### Author: 
+
+[Edward Hotchkiss][0]
+
+### Contributors:
+
+1. [Mark Lussier][1]
+2. [@dolphin278][2]
 
 [0]: http://edwardhotchkiss.com/
+[1]: mailto:mlussier@gmail.com
+[2]: https://github.com/dolphin278
