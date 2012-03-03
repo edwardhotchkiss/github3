@@ -2,9 +2,10 @@
   "name": "github3",
   "author": "Edward Hotchkiss <edward@edwardhotchkiss.com>",
   "contributors":[
-    { "name": "Edward Hotchkiss", "email": "edward@edwardhotchkiss.com" },
-    { "name": "Mark Lussier", "email": "mlussier@gmail.com" },
-    { "name": "@dolphin278", "github": "https://github.com/dolphin278" }
+    { "name": "Edward Hotchkiss", "github": "https://github.com/edwardhotchkiss" },
+    { "name": "Mark Lussier", "github": "https://github.com/intabulas" },
+    { "name": "@dolphin278", "github": "https://github.com/dolphin278" },
+    { "name": "Matias Woloski", "github":"https://github.com/woloski" }
   ],
   "description": "NodeJS GitHub API (v3) Wrapper",
   "version": "0.3.1",
