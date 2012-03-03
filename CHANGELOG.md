@@ -1,4 +1,30 @@
 
+0.4.0 / 2012-03-03 
+==================
+
+  * [dist] version bump
+  * Merge pull request #8 from woloski/6f5bafa0ec14a106d7b173b1fcb8a62b5ada915b
+  * "fix commit and push to branch test"
+  * [style] cleanup
+  * [contributors] added Matias Woloski as a contributor
+  * [merge] fixed conflicts
+  * "jslint pass"
+  * [README] stylize
+  * "merge with upstream, changed package.json to use 0.6.X as min engine otherwise won't run in c9"
+  * [README] stylize
+  * [README] added Roadmap, contributors
+  * [deps] bump Vows to v0.6.2
+  * "implemented getLastCommitRef, getCommit, getTree, getBlobText, getBlobTextByFilePaht, createCommit, updateRefHead"
+  * [cleanup] code stylization, more appropriate comments
+  * [style] stylize & accurately comment /lib
+  * [merge] manual
+  * [npmignore]
+  * [deps] removed "should"
+  * [dist] keywords
+  * [node] 0.6.12+ required, travis adjusted
+  * [npmignore] added
+  * [changelog] update
+
 0.3.1 / 2012-03-03 
 ==================
 
