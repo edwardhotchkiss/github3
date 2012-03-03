@@ -160,12 +160,24 @@ vows.describe('api tests').addBatch({
     topic:function(){
       github3.getLabels('github3', 'edwardhotchkiss', this.callback);
     },
-    'we should receive no errors, and one label back':function(error, data) {
+    'we should receive no errors, and two labels back':function(error, data) {
       assert.equal(error, null);    
       assert.equal(typeof(data), 'object');
-      assert.equal(data.length, 1);
+      assert.equal(data.length, 2);
     }
-  }
+  },
+  // getIssueLabels
+  'when making a call to getIssueLabels(github3, edwardhotchkiss, 6':{
+    topic:function(){
+      github3.getIssueLabels('github3', 'edwardhotchkiss', 6, this.callback);
+    },
+    'we should receive no errors, and two labels back"':function(error, data) {
+      assert.equal(error, null);    
+      assert.equal(typeof(data), 'object');
+      assert.equal(data.length, 2);
+    }
+  },
+
   
 }).export(module);
 
