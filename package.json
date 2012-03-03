@@ -21,8 +21,7 @@
     "request":"2.2.5"
   },
   "devDependencies":{
-    "vows":"0.5.13",
-    "should":"0.3.2"
+    "vows":"0.5.13"
   },
   "scripts": {
     "test": "vows test/*.test.js --spec"
