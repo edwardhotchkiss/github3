@@ -156,6 +156,153 @@ vows.describe('api tests').addBatch({
     }
   },
   
+  // getLastCommitRef
+  'when getting the last commit(githubapi-testrepo,woloski,':{
+    topic:function(){ 
+       // /repos/woloski/githubapi-testrepo/git/refs/heads/master
+       github3.getLastCommitRef('githubapi-testrepo','woloski', 'master', this.callback);
+    },
+    'we should receive no errors, and data back':function(error, data) {
+      assert.equal(error, null);      
+      assert.equal(typeof(data), 'object');
+      assert.equal(data.object.sha, '926a49e2ca29ec3f31c990e55134d5ac5cce1ec3');
+    }
+  },
+  // getCommit
+  'when getting a commit(githubapi-testrepo,woloski,':{
+    topic:function(){ 
+       // /repos/woloski/githubapi-testrepo/git/commits/926a49e2ca29ec3f31c990e55134d5ac5cce1ec3
+      github3.getCommit('githubapi-testrepo','woloski', '926a49e2ca29ec3f31c990e55134d5ac5cce1ec3', this.callback);
+    },
+    'we should receive no errors, and data back':function(error, data) {
+      assert.equal(error, null);      
+      assert.equal(typeof(data), 'object');
+      assert.equal(data.message, 'second commit\n');
+      assert.equal(data.sha, '926a49e2ca29ec3f31c990e55134d5ac5cce1ec3');
+      assert.equal(data.tree.sha, '07c74bb3dc6e074b95d1293ddbc64543eef6b14b');
+    }
+  },
+  // getTree
+  'when getting a tree(githubapi-testrepo,woloski,':{
+    topic:function(){ 
+       // /repos/woloski/githubapi-testrepo/git/trees/07c74bb3dc6e074b95d1293ddbc64543eef6b14b
+      github3.getTree('githubapi-testrepo','woloski', '07c74bb3dc6e074b95d1293ddbc64543eef6b14b', this.callback);
+    },
+    'we should receive no errors, and data back':function(error, data) {
+      assert.equal(error, null);      
+      assert.equal(typeof(data), 'object');
+      assert.equal(data.sha, '07c74bb3dc6e074b95d1293ddbc64543eef6b14b');
+      assert.equal(data.tree[0].path, 'README.md');
+      assert.equal(data.tree[1].path, 'afile.txt');
+    }
+  },
+  // getBlob
+  'when getting a blob as text(githubapi-testrepo,woloski,':{
+    topic:function(){ 
+       // /repos/woloski/githubapi-testrepo/git/blobs/7f52721c1c0b0b8190a3f30f36331e356f2ee282
+      github3.getBlobText('githubapi-testrepo','woloski', '7f52721c1c0b0b8190a3f30f36331e356f2ee282', this.callback);
+    },
+    'we should receive no errors, and data back':function(error, data) {
+      assert.equal(error, null);      
+      assert.equal(typeof(data), 'object');
+      assert.equal(data.sha, '7f52721c1c0b0b8190a3f30f36331e356f2ee282');
+      assert.equal(data.content, '# test readme\n\nthis is a markdown file');
+    }
+  },
+  
+  // getBlobTextByFilePath
+  'when getting a blob as text from master branch by name(githubapi-testrepo,woloski,':{
+    topic:function(){ 
+       // /repos/woloski/githubapi-testrepo/git/blobs/7f52721c1c0b0b8190a3f30f36331e356f2ee282
+      github3.getBlobTextByFilePath('githubapi-testrepo','woloski', 'README.md', this.callback);
+    },
+    'we should receive no errors, and data back':function(error, data) {
+      assert.equal(error, null);      
+      assert.equal(typeof(data), 'object');
+      assert.equal(data.sha, '7f52721c1c0b0b8190a3f30f36331e356f2ee282');
+      assert.equal(data.content, '# test readme\n\nthis is a markdown file');
+    }
+  },
+  
+  // createTreeAndAddFile
+  'when creating a tree with a file(githubapi-testrepo,githubapi-test,':{
+    topic:function(){ 
+       // /repos/woloski/githubapi-testrepo/git/trees
+      github3.username = 'githubapi-test';
+      github3.password = 'Passw0rd!';
+      github3.createTreeAndAddFile('githubapi-testrepo','githubapi-test', 'new-file.txt', 'some content', '07c74bb3dc6e074b95d1293ddbc64543eef6b14b', this.callback);
+      
+    },
+    'we should receive no errors, and data back':function(error, data) {
+      assert.equal(error, null);    
+      github3.getTree('githubapi-testrepo','woloski', data.sha, function(error, data) {
+          assert.equal(error, null);      
+          assert.equal(typeof(data), 'object');
+          assert.equal(data.tree.length, 3);
+          assert.equal(data.tree[data.tree.length-1].path, 'new-file.txt');
+          }); 
+    }
+  },
+  
+  // createCommit
+  'when creating a commit(githubapi-testrepo,githubapi-test,':{
+    topic:function(){ 
+       // /repos/githubapi-test/githubapi-testrepo/git/trees
+      github3.username = 'githubapi-test';
+      github3.password = 'Passw0rd!';
+      var self = this;
+      github3.createTreeAndAddFile('githubapi-testrepo','githubapi-test', 'new-file.txt', 'some content', '07c74bb3dc6e074b95d1293ddbc64543eef6b14b', function(error, data) {
+        // 926a49e2ca29ec3f31c990e55134d5ac5cce1ec3 is the last commit sha
+        // data.sha is the new tree sha
+        if (error !== null)
+            self.callback(error, null);
+            
+        github3.createCommit('githubapi-testrepo','githubapi-test', 'commit from a unit test', data.sha, '926a49e2ca29ec3f31c990e55134d5ac5cce1ec3', 'woloski', self.callback);    
+      });
+    },
+    'we should receive no errors, and data back':function(error, data) {
+      assert.equal(error, null);    
+      github3.getCommit('githubapi-testrepo','githubapi-test', data.sha, function(error, data) {
+          assert.equal(error, null);      
+          assert.equal(typeof(data), 'object');
+          assert.equal(data.message, 'commit from a unit test');
+        }); 
+    }
+  },
+    
+    // createCommit
+  'when pushing a commit to a branch(githubapi-testrepo,woloski,':{
+    topic:function(){ 
+      github3.username = 'githubapi-test';
+      github3.password = 'Passw0rd!';
+      var self = this;
+      // move testbranch to a previous commit first
+      github3.updateRefHead('githubapi-testrepo','githubapi-test', 'testbranch', 'e3d44d607d7fd8925e6dec776177b57d4480ace4', true, function(errpr, data) {}); 
+      
+      // create a new tree with a file in it
+      github3.createTreeAndAddFile('githubapi-testrepo','githubapi-test', 'new-file.txt', 'some content', 'abf950a42f33a69146a74e246c59c06398ea61e8', function(error, data) {
+        // e3d44d607d7fd8925e6dec776177b57d4480ace4 is the last commit sha
+        // data.sha is the new tree sha
+        if (error !== null)
+            self.callback(error, null);
+        
+        // commit the new tree
+        github3.createCommit('githubapi-testrepo','githubapi-test', 'commit from a unit test', data.sha, 
+                        'e3d44d607d7fd8925e6dec776177b57d4480ace4', 'githubapi-test', function(error, data) {
+        if (error !== null)
+            self.callback(error, null);
+            
+            // update testbranch to point to the new commit
+            github3.updateRefHead('githubapi-testrepo','githubapi-test', 'testbranch', data.sha, false, self.callback); 
+        });
+      });
+    },
+    'we should receive no errors, and data back':function(error, data) {
+      assert.equal(error, null); 
+      assert.isTrue(typeof(data.object) != 'undefined');
+      assert.equal(data.object.type, 'commit');
+    }
+  },
   
 }).export(module);
 
