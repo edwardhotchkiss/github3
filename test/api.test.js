@@ -155,7 +155,17 @@ vows.describe('api tests').addBatch({
       assert.equal(typeof(data), 'object');
     }
   },
-  
+  // getLabels
+  'when making a call to getLabels(github3, edwardhotchkiss,':{
+    topic:function(){
+      github3.getLabels('github3', 'edwardhotchkiss', this.callback);
+    },
+    'we should receive no errors, and one label back':function(error, data) {
+      assert.equal(error, null);    
+      assert.equal(typeof(data), 'object');
+      assert.equal(data.length, 1);
+    }
+  }
   
 }).export(module);
 
