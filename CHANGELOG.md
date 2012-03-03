@@ -1,4 +1,14 @@
 
+0.3.1 / 2012-03-03 
+==================
+
+  * [dist] bump version
+  * [tests] getIssueLabels
+  * [features] getIssueLabels
+  * [tests] getLabels +pass
+  * [features] add support for retrieving labels
+  * [node] engine range
+
 0.3.0 / 2012-02-12 
 ==================
 
