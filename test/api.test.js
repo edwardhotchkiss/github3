@@ -277,25 +277,25 @@ vows.describe('api tests').addBatch({
       github3.password = 'Passw0rd!';
       var self = this;
       // move testbranch to a previous commit first
-      github3.updateRefHead('githubapi-testrepo','githubapi-test', 'testbranch', 'e3d44d607d7fd8925e6dec776177b57d4480ace4', true, null); 
-      
-      // create a new tree with a file in it
-      github3.createTreeAndAddFile('githubapi-testrepo','githubapi-test', 'new-file.txt', 'some content', 'abf950a42f33a69146a74e246c59c06398ea61e8', function(error, data) {
-        // e3d44d607d7fd8925e6dec776177b57d4480ace4 is the last commit sha
-        // data.sha is the new tree sha
-        if (error !== null)
-            self.callback(error, null);
-        
-        // commit the new tree
-        github3.createCommit('githubapi-testrepo','githubapi-test', 'commit from a unit test', data.sha, 
-                        'e3d44d607d7fd8925e6dec776177b57d4480ace4', 'githubapi-test', function(error, data) {
-        if (error !== null)
-            self.callback(error, null);
+      github3.updateRefHead('githubapi-testrepo','githubapi-test', 'testbranch', 'e3d44d607d7fd8925e6dec776177b57d4480ace4', true, function(error, data) {
+          // create a new tree with a file in it
+          github3.createTreeAndAddFile('githubapi-testrepo','githubapi-test', 'new-file.txt', 'some content', 'abf950a42f33a69146a74e246c59c06398ea61e8', function(error, data) {
+            // e3d44d607d7fd8925e6dec776177b57d4480ace4 is the last commit sha
+            // data.sha is the new tree sha
+            if (error !== null)
+                self.callback(error, null);
             
-            // update testbranch to point to the new commit
-            github3.updateRefHead('githubapi-testrepo','githubapi-test', 'testbranch', data.sha, false, self.callback); 
-        });
-      });
+            // commit the new tree
+            github3.createCommit('githubapi-testrepo','githubapi-test', 'commit from a unit test', data.sha, 
+                            'e3d44d607d7fd8925e6dec776177b57d4480ace4', 'githubapi-test', function(error, data) {
+            if (error !== null)
+                self.callback(error, null);
+                
+                // update testbranch to point to the new commit
+                github3.updateRefHead('githubapi-testrepo','githubapi-test', 'testbranch', data.sha, false, self.callback); 
+            });
+          });
+        }); 
     },
     'we should receive no errors, and data back':function(error, data) {
       assert.equal(error, null); 
