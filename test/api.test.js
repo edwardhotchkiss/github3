@@ -96,7 +96,7 @@ vows.describe('api tests').addBatch({
     }
   },
   // getBranches
-  'when making a call to getLanguages(github3,edwardhotchkiss,':{
+  'when making a call to getBranches(github3,edwardhotchkiss,':{
     topic:function(){ 
       github3.getBranches('github3','edwardhotchkiss', this.callback);
     },
@@ -277,7 +277,7 @@ vows.describe('api tests').addBatch({
       github3.password = 'Passw0rd!';
       var self = this;
       // move testbranch to a previous commit first
-      github3.updateRefHead('githubapi-testrepo','githubapi-test', 'testbranch', 'e3d44d607d7fd8925e6dec776177b57d4480ace4', true, function(errpr, data) {}); 
+      github3.updateRefHead('githubapi-testrepo','githubapi-test', 'testbranch', 'e3d44d607d7fd8925e6dec776177b57d4480ace4', true, null); 
       
       // create a new tree with a file in it
       github3.createTreeAndAddFile('githubapi-testrepo','githubapi-test', 'new-file.txt', 'some content', 'abf950a42f33a69146a74e246c59c06398ea61e8', function(error, data) {
@@ -325,7 +325,7 @@ vows.describe('api tests').addBatch({
       assert.equal(typeof(data), 'object');
       assert.equal(data.length, 2);
     }
-  },
+  }
   
 }).export(module);
 
