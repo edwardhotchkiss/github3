@@ -56,8 +56,8 @@ Copyright (c) 2011, Edward Hotchkiss.
 
 ### Contributors:
 
-[Mark Lussier][1]
-[@dolphin278][2]
+1. [Mark Lussier][1]
+2. [@dolphin278][2]
 
 [0]: http://edwardhotchkiss.com/
 [1]: mailto:mlussier@gmail.com
