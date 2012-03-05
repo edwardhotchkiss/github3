@@ -6,6 +6,16 @@ var github3 = new require('../lib/github3');
 
 vows.describe('api tests').addBatch({
 
+  // isFunction
+  'when instantiating github3':{
+    topic:function(){
+      return github3;
+    },
+    'github3 should be a function':function(topic) {
+      assert.equal(typeof(topic), 'function');
+    }
+  },
+
   // _get
   'when making a generic _get call to /orgs/github/public_members':{
     topic:function(){ 
@@ -326,7 +336,7 @@ vows.describe('api tests').addBatch({
       assert.equal(data.length, 2);
     }
   },
-  
+
   // getIssueLabels
   'when making a call to getIssueLabels(github3, edwardhotchkiss, 6':{
     topic:function(){
@@ -336,6 +346,20 @@ vows.describe('api tests').addBatch({
       assert.equal(error, null);    
       assert.equal(typeof(data), 'object');
       assert.equal(data.length, 2);
+    }
+  },
+
+  // createLabel
+  'when creating a label with createLabel(':{
+    topic:function(){
+      var self = this;
+      github3.username = 'githubapi-test';
+      github3.password = 'Passw0rd!';
+      github3.createLabel('githubapi-testrepo','githubapi-test', { name : 'fake label', color : '#ff0099' }, self.callback);
+    },
+    'we should receive back no errors, and a label with a data object back':function(error, data){
+      assert.isNull(error);
+      assert.equal(typeof(data), 'object');
     }
   }
   
