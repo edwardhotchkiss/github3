@@ -46,6 +46,10 @@ github3.getOrgMembers('github', function(error, members) {
 	* Release app on Nodejitsu
 	* Release Github3 v1.0.0
 
+### Running Tests
+
+	* Tests are being reworked. Considering using process.env['github_username'] etc...?
+
 ### License (MIT)
 
 Copyright (c) 2011, Edward Hotchkiss.
