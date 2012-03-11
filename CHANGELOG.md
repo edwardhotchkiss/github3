@@ -1,4 +1,17 @@
 
+0.4.1 / 2012-03-11 
+==================
+
+  * [dist] bump
+  * [docs](sweet)
+  * [paige] paige.config for doc building
+  * [formating] comments and style
+  * [engine] prep for 0.8.0, require 0.6.12+
+  * [tests] cleanup
+  * [stylize] tests
+  * [changelog] updated for 0.4.0
+ 
+
 0.4.0 / 2012-03-03 
 ==================
 
