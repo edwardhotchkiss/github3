@@ -1,0 +1,62 @@
+<!DOCTYPE html> <html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">      <title>GitHub3</title>   <style>     body {       font-size: 16px;       line-height: 24px;       background: #fff url("bg.png");       color: #252519;       font-family: "Palatino Linotype", "Book Antiqua", Palatino, FreeSerif, serif;       padding: 0 0 50px 50px;     }     div.container {       width: 720px;       margin: 50px 0 50px 50px;     }     p {       width: 550px;     }       #documentation p {         margin-bottom: 4px;       }     a, a:visited {       padding: 0 2px;       text-decoration: none;       background: #dbe6f3;       color: #3f6fa5;     }     a:active, a:hover {       color: #dbe6f3;       background: #3f6fa5;     }     h1, h2, h3, h4, h5, h6 {       margin-top: 40px;       width: 550px;       line-height: 1.25em;     }     b.header {       font-size: 18px;     }     span.alias {       font-size: 14px;       font-style: italic;       margin-left: 20px;     }     table, tr, td {       margin: 0; padding: 0;     }       td {         padding: 2px 12px 2px 0;       }     ul {       list-style-type: circle;       padding: 0 0 0 20px;     }       li {         width: 500px;         margin-bottom: 10px;       }     code, pre, tt {       font-family: Monaco, Consolas, "Lucida Console", monospace;       font-size: 12px;       line-height: 18px;       color: #555529;     }       pre {         font-size: 12px;         padding: 2px 0 2px 12px;         border-left: 6px solid #aaaa99;         margin: 0px 0 30px;       }            #ribbon {      line-height: 0;     }          #ribbon:hover {      background: none;     }          #ribbon img {      position: fixed;      top: 0;      right: 0;      border: 0;      z-index: 2;     }   </style> </head> <body>      <a id="ribbon" href="https://github.com/edwardhotchkiss/github3">    <img src="https://a248.e.akamai.net/assets.github.com/img/71eeaab9d563c2b3c590319b398dd35683265e85/687474703a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67"      alt="Fork me on GitHub"></a>      <h1>GitHub3</h1>        <em>NodeJS GitHub API (v3) Wrapper</em>         <h3>Source files:</h3>   <ol>            <li><a href="github3.html">github3.js</a></li>            <li><a href="api.test.html">api.test.js</a></li>        </ol>      <h1>GitHub 3 <a href="http://travis-ci.org/edwardhotchkiss/github3"><img src="https://secure.travis-ci.org/edwardhotchkiss/github3.png" alt="Build Status" title="" /></a></h1>
+
+<blockquote>
+  <p>Node.JS GitHub API (v3) Wrapper</p>
+</blockquote>
+
+<h3>Installation</h3>
+
+<pre>
+$ npm install github3
+</pre>
+
+<h3>Example Code</h3>
+
+<pre>
+
+var github3 = require('github3');
+
+// get user information
+github3.getUser(user, function('edwardhotchkiss', user) {
+  console.log(user);
+});
+
+// get users repos
+github3.getUserRepos('edwardhotchkiss', function(error, repos) {
+  console.log(repos);
+});
+
+// get users watched repos
+github3.getUsersWatched('edwardhotchkiss', function(error, watched) {
+  console.log(watched);
+});
+
+// get an organizations github users
+github3.getOrgMembers('github', function(error, members) {
+  console.log('members');
+});
+
+</pre>
+
+<h3>Roadmap to 1.0.0</h3>
+
+<pre><code>* Integrate oAuth Completely
+* Document fully all methods
+* Add Examples
+* Build a non-trivial app with `github3`
+* Release app on Nodejitsu
+* Release Github3 v1.0.0</code></pre>
+
+<h3>Running Tests</h3>
+
+<pre><code>* Tests are being reworked. Considering using process.env['github_username'] etc...?</code></pre>
+
+<h3>License (MIT)</h3>
+
+<p>Copyright (c) 2011, Edward Hotchkiss.</p>
+
+<p>**</p>
+
+<h3>Author: <a href="http://github.com/edwardhotchkiss/">Edward Hotchkiss</a></h3>
+
+<h3>Contributors: <a href="https://github.com/intabulas/">Mark Lussier</a>, <a href="https://github.com/dolphin278/">@dolphin278</a> &amp; <a href="https://github.com/woloski/">Matias Woloski</a></h3> </body> </html>

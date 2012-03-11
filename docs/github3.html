@@ -1,0 +1,493 @@
+<!DOCTYPE html>  <html> <head>   <title>github3.js</title>   <meta http-equiv="content-type" content="text/html; charset=UTF-8">   <link rel="stylesheet" media="all" href="rocco.css" /> </head> <body> <div id="navbar">     <h3>GitHub3 - NodeJS GitHub API (v3) Wrapper<em></em></h3>   </div>   <div id="container">     <div id="background"></div>            <div id="jump_to">         Jump To &hellip;         <div id="jump_wrapper">           <div id="jump_page">           <a class="source" href="index.html">Index</a>                                           <a class="source" href="github3.html">                 github3.js               </a>                                           <a class="source" href="api.test.html">                 api.test.js               </a>                        </div>         </div>       </div>          <table cellpadding="0" cellspacing="0">       <thead>         <tr>           <th class="docs">             <h1>               github3.js             </h1>           </th>           <th class="code">           </th>         </tr>       </thead>       <tbody>                               <tr id="section-1">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-1">&#182;</a>               </div>                            </td>             <td class="code">               <div class="highlight"><pre><span class="cm">/**</span>
+<span class="cm"> * NodeJS GitHub API (v3) Wrapper</span>
+<span class="cm"> * @author Edward Hotchkiss</span>
+<span class="cm"> * @contributir Matias Woloski (@woloski)</span>
+<span class="cm"> * @class github3</span>
+<span class="cm"> */</span>
+
+<span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;request&#39;</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">github3</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){};</span>
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">github3</span><span class="p">;</span>
+
+<span class="nx">github3</span><span class="p">.</span><span class="nx">username</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
+<span class="nx">github3</span><span class="p">.</span><span class="nx">password</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span></pre></div>             </td>           </tr>                               <tr id="section-2">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-2">&#182;</a>               </div>               <p>oAuth Token</p>             </td>             <td class="code">               <div class="highlight"><pre><span class="nx">github3</span><span class="p">.</span><span class="nx">accessToken</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span></pre></div>             </td>           </tr>                               <tr id="section-3">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-3">&#182;</a>               </div>               <p>API Rate Limit Details</p>             </td>             <td class="code">               <div class="highlight"><pre><span class="nx">github3</span><span class="p">.</span><span class="nx">rateLimit</span>          <span class="o">=</span> <span class="mi">5000</span><span class="p">;</span>
+<span class="nx">github3</span><span class="p">.</span><span class="nx">rateLimitRemaining</span> <span class="o">=</span> <span class="mi">5000</span><span class="p">;</span>  
+
+<span class="cm">/**</span>
+<span class="cm"> * Sets credentials for GitHub access.</span>
+<span class="cm"> * @class github3</span>
+<span class="cm"> * @method setCredentials</span>
+<span class="cm"> * @param {String} username GitHub username</span>
+<span class="cm"> * @param {String} password GitHub password</span>
+<span class="cm"> */</span>
+
+<span class="nx">github3</span><span class="p">.</span><span class="nx">setCredentials</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">username</span><span class="p">,</span> <span class="nx">password</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">username</span> <span class="o">=</span> <span class="nx">username</span><span class="p">;</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">password</span> <span class="o">=</span> <span class="nx">password</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="cm">/*!</span>
+<span class="cm"> * Sets oAuth Access Token for GitHub access.</span>
+<span class="cm"> * @class github3</span>
+<span class="cm"> * @method setAccessToken</span>
+<span class="cm"> * @param {Token}</span>
+<span class="cm">*/</span>
+
+<span class="nx">github3</span><span class="p">.</span><span class="nx">setAccessToken</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">token</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">accessToken</span> <span class="o">=</span> <span class="nx">token</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * Builds and executes a github api call</span>
+<span class="cm"> * @class github3</span>
+<span class="cm"> * @private _request</span>
+<span class="cm"> * @param {Object} options or just API URI Path for GET requests</span>
+<span class="cm"> * @param {Function} callback Function to call upon error or success</span>
+<span class="cm"> * @returns {Object} error, {Object} data</span>
+<span class="cm">*/</span>
+
+<span class="nx">github3</span><span class="p">.</span><span class="nx">_request</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">options</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">base</span><span class="p">;</span>
+  <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">username</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="p">.</span><span class="nx">password</span><span class="p">)</span> <span class="p">{</span></pre></div>             </td>           </tr>                               <tr id="section-4">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-4">&#182;</a>               </div>               <p>if we have credentials, use them in request</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">base</span> <span class="o">=</span> <span class="s1">&#39;https://&#39;</span><span class="o">+</span><span class="k">this</span><span class="p">.</span><span class="nx">username</span><span class="o">+</span><span class="s1">&#39;:&#39;</span><span class="o">+</span><span class="k">this</span><span class="p">.</span><span class="nx">password</span><span class="o">+</span><span class="s1">&#39;@api.github.com&#39;</span><span class="p">;</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="nx">base</span> <span class="o">=</span> <span class="s1">&#39;https://api.github.com&#39;</span><span class="p">;</span>
+  <span class="p">}</span>
+  
+  <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="o">!=</span> <span class="s2">&quot;string&quot;</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">options</span><span class="p">.</span><span class="nx">uri</span> <span class="o">=</span> <span class="nx">base</span> <span class="o">+</span> <span class="nx">options</span><span class="p">.</span><span class="nx">uri</span><span class="p">;</span>
+  <span class="p">}</span>
+  
+  <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">accessToken</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">options</span><span class="p">.</span><span class="nx">headers</span><span class="p">.</span><span class="nx">Authorization</span> <span class="o">=</span> <span class="s1">&#39;token &#39;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">accessToken</span><span class="p">;</span>
+  <span class="p">}</span>
+  
+  <span class="nx">request</span><span class="p">(</span><span class="nx">options</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">response</span><span class="p">,</span> <span class="nx">body</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">callback</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="kc">null</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+      <span class="k">switch</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">statusCode</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">case</span> <span class="mi">404</span><span class="o">:</span>
+          <span class="nx">callback</span><span class="p">(</span><span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;Path not found&#39;</span><span class="p">),</span> <span class="kc">null</span><span class="p">);</span>
+          <span class="k">break</span><span class="p">;</span></pre></div>             </td>           </tr>                               <tr id="section-5">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-5">&#182;</a>               </div>               <p>TODO: handle 4XX errors</p>             </td>             <td class="code">               <div class="highlight"><pre>        <span class="k">case</span> <span class="mi">422</span><span class="o">:</span>
+          <span class="nx">callback</span><span class="p">(</span><span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">message</span><span class="p">),</span> <span class="kc">null</span><span class="p">);</span>
+          <span class="k">break</span><span class="p">;</span>
+        <span class="k">default</span><span class="o">:</span>
+          <span class="k">try</span> <span class="p">{</span></pre></div>             </td>           </tr>                               <tr id="section-6">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-6">&#182;</a>               </div>               <p>Grab the Rate Limit details and make them available</p>             </td>             <td class="code">               <div class="highlight"><pre>            <span class="nx">github3</span><span class="p">.</span><span class="nx">rateLimit</span> <span class="o">=</span> <span class="nx">response</span><span class="p">.</span><span class="nx">headers</span><span class="p">[</span><span class="s1">&#39;x-ratelimit-limit&#39;</span><span class="p">];</span>
+            <span class="nx">github3</span><span class="p">.</span><span class="nx">rateLimitRemaining</span> <span class="o">=</span> <span class="nx">response</span><span class="p">.</span><span class="nx">headers</span><span class="p">[</span><span class="s1">&#39;x-ratelimit-remaining&#39;</span><span class="p">];</span>  
+            <span class="kd">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">body</span><span class="p">);</span>
+            <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
+          <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">error2</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">callback</span><span class="p">(</span><span class="nx">error2</span><span class="p">,</span> <span class="kc">null</span><span class="p">);</span>
+          <span class="p">}</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+<span class="p">};</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * Performs a GET</span>
+<span class="cm"> * @class github3</span>
+<span class="cm"> * @private _get</span>
+<span class="cm"> * @param {String} path API endpoint </span>
+<span class="cm"> * @param {Functon} callback Method to execute on completion</span>
+<span class="cm"> */</span>
+
+<span class="nx">github3</span><span class="p">.</span><span class="nx">_get</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">path</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">_request</span><span class="p">({</span>
+    <span class="nx">uri</span><span class="o">:</span> <span class="nx">path</span><span class="p">,</span>
+    <span class="nx">headers</span><span class="o">:</span> <span class="p">{}</span>
+  <span class="p">},</span> <span class="nx">callback</span><span class="p">);</span>
+<span class="p">};</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * Performs a PUT</span>
+<span class="cm"> * @class github3</span>
+<span class="cm"> * @private _put</span>
+<span class="cm"> * @param {String} path API endpoint </span>
+<span class="cm"> * @param {Object} body Data</span>
+<span class="cm"> * @param {Functon} callback Method to execute on completion</span>
+<span class="cm"> */</span>
+
+<span class="nx">github3</span><span class="p">.</span><span class="nx">_put</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">path</span><span class="p">,</span> <span class="nx">body</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">body</span> <span class="o">=</span> <span class="nx">body</span> <span class="o">||</span> <span class="s1">&#39;{}&#39;</span><span class="p">;</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">_request</span><span class="p">({</span>
+    <span class="nx">uri</span><span class="o">:</span><span class="nx">path</span><span class="p">,</span>
+    <span class="nx">method</span><span class="o">:</span><span class="s2">&quot;PUT&quot;</span><span class="p">,</span>
+    <span class="nx">headers</span><span class="o">:</span> <span class="p">{</span>
+      <span class="s2">&quot;Content-Length&quot;</span><span class="o">:</span><span class="nx">body</span><span class="p">.</span><span class="nx">length</span>
+    <span class="p">},</span>
+    <span class="nx">body</span><span class="o">:</span><span class="nx">body</span>
+  <span class="p">},</span>
+  <span class="nx">callback</span><span class="p">);</span>
+<span class="p">};</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * Performs a PATCH</span>
+<span class="cm"> * @class github3</span>
+<span class="cm"> * @private _patch</span>
+<span class="cm"> * @param {String} path API endpoint </span>
+<span class="cm"> * @param {Object} body Data</span>
+<span class="cm"> * @param {Functon} callback Method to execute on completion</span>
+<span class="cm"> */</span>
+
+<span class="nx">github3</span><span class="p">.</span><span class="nx">_patch</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">path</span><span class="p">,</span> <span class="nx">body</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">body</span> <span class="o">=</span> <span class="nx">body</span> <span class="o">||</span> <span class="s1">&#39;{}&#39;</span><span class="p">;</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">_request</span><span class="p">({</span>
+    <span class="nx">uri</span><span class="o">:</span><span class="nx">path</span><span class="p">,</span>
+    <span class="nx">method</span><span class="o">:</span><span class="s1">&#39;PATCH&#39;</span><span class="p">,</span>
+    <span class="nx">headers</span><span class="o">:</span><span class="p">{</span>
+      <span class="s1">&#39;Content-Length&#39;</span><span class="o">:</span><span class="nx">body</span><span class="p">.</span><span class="nx">length</span>
+    <span class="p">},</span>
+    <span class="nx">body</span><span class="o">:</span><span class="nx">body</span>
+  <span class="p">},</span>
+  <span class="nx">callback</span><span class="p">);</span>
+<span class="p">};</span>
+
+<span class="nx">github3</span><span class="p">.</span><span class="nx">_post</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">path</span><span class="p">,</span> <span class="nx">body</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">body</span> <span class="o">=</span> <span class="nx">body</span> <span class="o">||</span> <span class="s1">&#39;{}&#39;</span><span class="p">;</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">_request</span><span class="p">({</span>
+    <span class="nx">uri</span><span class="o">:</span><span class="nx">path</span><span class="p">,</span>
+    <span class="nx">method</span><span class="o">:</span><span class="s2">&quot;POST&quot;</span><span class="p">,</span>
+    <span class="nx">headers</span><span class="o">:</span> <span class="p">{</span>
+      <span class="s2">&quot;Content-Length&quot;</span><span class="o">:</span><span class="nx">body</span><span class="p">.</span><span class="nx">length</span>
+    <span class="p">},</span>
+    <span class="nx">body</span><span class="o">:</span><span class="nx">body</span>
+  <span class="p">},</span>
+  <span class="nx">callback</span><span class="p">);</span>
+<span class="p">};</span>
+
+
+<span class="cm">/**</span>
+<span class="cm"> * Retreives a Users Information</span>
+<span class="cm"> * @class github3</span>
+<span class="cm"> * @method getUser</span>
+<span class="cm"> * @param {Functon} callback Method to execute on completion</span>
+<span class="cm"> */</span>
+
+<span class="nx">github3</span><span class="p">.</span><span class="nx">getUser</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">user</span><span class="p">,</span> <span class="nx">callback</span><span class="p">){</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">_get</span><span class="p">(</span><span class="s1">&#39;/users/&#39;</span> <span class="o">+</span> <span class="nx">user</span><span class="p">,</span> <span class="nx">callback</span><span class="p">);</span>
+<span class="p">};</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * Retrieves a Users Repos</span>
+<span class="cm"> * @class github3</span>
+<span class="cm"> * @method getUserRepos</span>
+<span class="cm"> * @param {Functon} callback Method to execute on completion</span>
+<span class="cm"> */</span>
+
+<span class="nx">github3</span><span class="p">.</span><span class="nx">getUserRepos</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">user</span><span class="p">,</span> <span class="nx">callback</span><span class="p">){</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">_get</span><span class="p">(</span><span class="s1">&#39;/users/&#39;</span> <span class="o">+</span> <span class="nx">user</span> <span class="o">+</span> <span class="s1">&#39;/repos&#39;</span><span class="p">,</span> <span class="nx">callback</span><span class="p">);</span>
+<span class="p">};</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * Repos a user is watching</span>
+<span class="cm"> * @class github3</span>
+<span class="cm"> * @method getUserRepos</span>
+<span class="cm"> * @param {Functon} callback Method to execute on completion</span>
+<span class="cm"> */</span>
+
+<span class="nx">github3</span><span class="p">.</span><span class="nx">getUsersWatched</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">user</span><span class="p">,</span> <span class="nx">callback</span><span class="p">){</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">_get</span><span class="p">(</span><span class="s1">&#39;/users/&#39;</span> <span class="o">+</span> <span class="nx">user</span> <span class="o">+</span> <span class="s1">&#39;/watched&#39;</span><span class="p">,</span> <span class="nx">callback</span><span class="p">);</span>
+<span class="p">};</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * Retrieve Organization Members</span>
+<span class="cm"> * @class github3</span>
+<span class="cm"> * @method getOrgMembers</span>
+<span class="cm"> * @param {Functon} callback Method to execute on completion</span>
+<span class="cm"> */</span>
+
+<span class="nx">github3</span><span class="p">.</span><span class="nx">getOrgMembers</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">org</span><span class="p">,</span> <span class="nx">callback</span><span class="p">){</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">_get</span><span class="p">(</span><span class="s1">&#39;/orgs/&#39;</span><span class="o">+</span> <span class="nx">org</span> <span class="o">+</span> <span class="s1">&#39;/public_members&#39;</span><span class="p">,</span> <span class="nx">callback</span><span class="p">);</span>
+<span class="p">};</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * Followers</span>
+<span class="cm"> * @class github3</span>
+<span class="cm"> * @method getFollowers</span>
+<span class="cm"> * @param {Functon} callback Method to execute on completion</span>
+<span class="cm"> */</span>
+
+<span class="nx">github3</span><span class="p">.</span><span class="nx">getFollowers</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">user</span><span class="p">,</span> <span class="nx">callback</span><span class="p">){</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">_get</span><span class="p">(</span><span class="s1">&#39;/users/&#39;</span><span class="o">+</span> <span class="nx">user</span> <span class="o">+</span> <span class="s1">&#39;/followers&#39;</span><span class="p">,</span> <span class="nx">callback</span><span class="p">);</span>
+<span class="p">};</span>
+
+<span class="cm">/*!</span>
+<span class="cm"> * Retrieve users following `user`</span>
+<span class="cm"> * @class github3</span>
+<span class="cm"> * @method getFollowers</span>
+<span class="cm"> * @param {Functon} callback Method to execute on completion</span>
+<span class="cm"> */</span>
+
+<span class="nx">github3</span><span class="p">.</span><span class="nx">getFollowing</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">user</span><span class="p">,</span> <span class="nx">callback</span><span class="p">){</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">_get</span><span class="p">(</span><span class="s1">&#39;/users/&#39;</span><span class="o">+</span> <span class="nx">user</span> <span class="o">+</span> <span class="s1">&#39;/following&#39;</span><span class="p">,</span> <span class="nx">callback</span><span class="p">);</span>
+<span class="p">};</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * Retrieve pull requests (open/closed) on a repository</span>
+<span class="cm"> * @class github3</span>
+<span class="cm"> * @method getPullRequests</span>
+<span class="cm"> * @param {String} repo Repository</span>
+<span class="cm"> * @param {String} state Pull Request Status -- open or closed</span>
+<span class="cm"> * @param {Functon} callback Method to execute on completion</span>
+<span class="cm"> */</span>
+
+<span class="nx">github3</span><span class="p">.</span><span class="nx">getPullRequests</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">repo</span><span class="p">,</span> <span class="nx">name</span><span class="p">,</span> <span class="nx">state</span><span class="p">,</span> <span class="nx">callback</span><span class="p">){</span>
+  <span class="nx">state</span> <span class="o">=</span> <span class="nx">state</span> <span class="o">||</span> <span class="s1">&#39;open&#39;</span><span class="p">;</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">_get</span><span class="p">(</span><span class="s1">&#39;/repos/&#39;</span><span class="o">+</span><span class="nx">name</span><span class="o">+</span><span class="s1">&#39;/&#39;</span><span class="o">+</span><span class="nx">repo</span><span class="o">+</span><span class="s1">&#39;/pulls?state=&#39;</span><span class="o">+</span><span class="nx">state</span><span class="p">,</span> <span class="nx">callback</span><span class="p">);</span>
+<span class="p">};</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * Retrieve an issues comments</span>
+<span class="cm"> * @class github3</span>
+<span class="cm"> * @method getPullRequests</span>
+<span class="cm"> * @param {String} repo Repository</span>
+<span class="cm"> * @param {String} name repo owner name</span>
+<span class="cm"> * @param {Number} issueId ID # of issue</span>
+<span class="cm"> * @param {Functon} callback Method to execute on completion</span>
+<span class="cm"> */</span>
+
+<span class="nx">github3</span><span class="p">.</span><span class="nx">getIssueComments</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">repo</span><span class="p">,</span> <span class="nx">name</span><span class="p">,</span> <span class="nx">issueId</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">_get</span><span class="p">(</span><span class="s1">&#39;/repos/&#39;</span><span class="o">+</span><span class="nx">name</span><span class="o">+</span><span class="s1">&#39;/&#39;</span><span class="o">+</span><span class="nx">repo</span><span class="o">+</span><span class="s1">&#39;/issues/&#39;</span><span class="o">+</span><span class="nx">issueId</span><span class="o">+</span><span class="s1">&#39;/comments&#39;</span><span class="p">,</span> <span class="nx">callback</span><span class="p">);</span>
+<span class="p">};</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * Merges a pull request</span>
+<span class="cm"> * @class github3</span>
+<span class="cm"> * @method mergePullRequest</span>
+<span class="cm"> * @param {String} repo Repository</span>
+<span class="cm"> * @param {String} name repo owner name</span>
+<span class="cm"> * @param {Number} issueId ID # of issue</span>
+<span class="cm"> * @param {Functon} callback Method to execute on completion</span>
+<span class="cm"> */</span>
+
+<span class="nx">github3</span><span class="p">.</span><span class="nx">mergePullRequest</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">repo</span><span class="p">,</span> <span class="nx">name</span><span class="p">,</span> <span class="nx">pullRequestId</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">_put</span><span class="p">(</span><span class="s1">&#39;/repos/&#39;</span><span class="o">+</span><span class="nx">name</span><span class="o">+</span><span class="s1">&#39;/&#39;</span><span class="o">+</span><span class="nx">repo</span><span class="o">+</span><span class="s1">&#39;/pulls/&#39;</span><span class="o">+</span><span class="nx">pullRequestId</span><span class="o">+</span><span class="s1">&#39;/merge&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="nx">callback</span><span class="p">);</span>
+<span class="p">};</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * Closes a pull request</span>
+<span class="cm"> * @class github3</span>
+<span class="cm"> * @method closePullRequest</span>
+<span class="cm"> * @param {String} repo Repository</span>
+<span class="cm"> * @param {String} name repo owner name</span>
+<span class="cm"> * @param {Number} pullRequestId ID # of pull request</span>
+<span class="cm"> * @param {Functon} callback Method to execute on completion</span>
+<span class="cm"> */</span>
+
+<span class="nx">github3</span><span class="p">.</span><span class="nx">closePullRequest</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">repo</span><span class="p">,</span> <span class="nx">name</span><span class="p">,</span> <span class="nx">pullRequestId</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">_patch</span><span class="p">(</span><span class="s1">&#39;/repos/&#39;</span><span class="o">+</span><span class="nx">name</span><span class="o">+</span><span class="s1">&#39;/&#39;</span><span class="o">+</span><span class="nx">repo</span><span class="o">+</span><span class="s1">&#39;/pulls/&#39;</span><span class="o">+</span><span class="nx">pullRequestId</span><span class="o">+</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="s1">&#39;{ &quot;state&quot;:&quot;closed&quot; }&#39;</span><span class="p">,</span> <span class="nx">callback</span><span class="p">);</span>
+<span class="p">};</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * Repository Contributors</span>
+<span class="cm"> * @class github3</span>
+<span class="cm"> * @method getContributors</span>
+<span class="cm"> * @param {Functon} callback Method to execute on completion</span>
+<span class="cm"> */</span>
+
+<span class="nx">github3</span><span class="p">.</span><span class="nx">getContributors</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">repo</span><span class="p">,</span> <span class="nx">name</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">_get</span><span class="p">(</span><span class="s1">&#39;/repos/&#39;</span><span class="o">+</span><span class="nx">name</span><span class="o">+</span><span class="s1">&#39;/&#39;</span><span class="o">+</span><span class="nx">repo</span><span class="o">+</span><span class="s1">&#39;/contributors&#39;</span><span class="p">,</span><span class="nx">callback</span><span class="p">);</span>
+<span class="p">};</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * Repository Languages</span>
+<span class="cm"> * @class github3</span>
+<span class="cm"> * @method getLanguages</span>
+<span class="cm"> */</span>
+
+<span class="nx">github3</span><span class="p">.</span><span class="nx">getLanguages</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">repo</span><span class="p">,</span> <span class="nx">name</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">_get</span><span class="p">(</span><span class="s1">&#39;/repos/&#39;</span><span class="o">+</span><span class="nx">name</span><span class="o">+</span><span class="s1">&#39;/&#39;</span><span class="o">+</span><span class="nx">repo</span><span class="o">+</span><span class="s1">&#39;/languages&#39;</span><span class="p">,</span><span class="nx">callback</span><span class="p">);</span>
+<span class="p">};</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * Retrieve repository branches</span>
+<span class="cm"> * @class github3</span>
+<span class="cm"> * @method getBranches</span>
+<span class="cm"> * @param {Functon} callback Method to execute on completion</span>
+<span class="cm"> */</span>
+
+<span class="nx">github3</span><span class="p">.</span><span class="nx">getBranches</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">repo</span><span class="p">,</span> <span class="nx">name</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">_get</span><span class="p">(</span><span class="s1">&#39;/repos/&#39;</span><span class="o">+</span><span class="nx">name</span><span class="o">+</span><span class="s1">&#39;/&#39;</span><span class="o">+</span><span class="nx">repo</span><span class="o">+</span><span class="s1">&#39;/branches&#39;</span><span class="p">,</span><span class="nx">callback</span><span class="p">);</span>
+<span class="p">};</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * Retrieve repository collaborators</span>
+<span class="cm"> * @class github3</span>
+<span class="cm"> * @method getCollaborators</span>
+<span class="cm"> * @param {Functon} callback Method to execute on completion</span>
+<span class="cm"> */</span>
+
+<span class="nx">github3</span><span class="p">.</span><span class="nx">getCollaborators</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">repo</span><span class="p">,</span> <span class="nx">name</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">_get</span><span class="p">(</span><span class="s1">&#39;/repos/&#39;</span><span class="o">+</span><span class="nx">name</span><span class="o">+</span><span class="s1">&#39;/&#39;</span><span class="o">+</span><span class="nx">repo</span><span class="o">+</span><span class="s1">&#39;/collaborators&#39;</span><span class="p">,</span><span class="nx">callback</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * Retrieve Repository Commits</span>
+<span class="cm"> * @class github3</span>
+<span class="cm"> * @method getCommits</span>
+<span class="cm"> * @param {Functon} callback Method to execute on completion</span>
+<span class="cm"> */</span>
+
+<span class="nx">github3</span><span class="p">.</span><span class="nx">getCommits</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">repo</span><span class="p">,</span> <span class="nx">name</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">_get</span><span class="p">(</span><span class="s1">&#39;/repos/&#39;</span><span class="o">+</span><span class="nx">name</span><span class="o">+</span><span class="s1">&#39;/&#39;</span><span class="o">+</span><span class="nx">repo</span><span class="o">+</span><span class="s1">&#39;/commits&#39;</span><span class="p">,</span><span class="nx">callback</span><span class="p">)</span>
+<span class="p">};</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * Repository last commit ref</span>
+<span class="cm"> * @class github3</span>
+<span class="cm"> * @method getLastCommitRef</span>
+<span class="cm">*/</span>
+
+<span class="nx">github3</span><span class="p">.</span><span class="nx">getLastCommitRef</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">repo</span><span class="p">,</span><span class="nx">name</span><span class="p">,</span><span class="nx">branch</span><span class="p">,</span><span class="nx">callback</span><span class="p">)</span> <span class="p">{</span></pre></div>             </td>           </tr>                               <tr id="section-7">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-7">&#182;</a>               </div>               <p>/repos/#{@repo}/git/refs/heads/#{@branch}"</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="k">this</span><span class="p">.</span><span class="nx">_get</span><span class="p">(</span><span class="s1">&#39;/repos/&#39;</span><span class="o">+</span><span class="nx">name</span><span class="o">+</span><span class="s1">&#39;/&#39;</span><span class="o">+</span><span class="nx">repo</span><span class="o">+</span><span class="s1">&#39;/git/refs/heads/&#39;</span><span class="o">+</span><span class="nx">branch</span><span class="p">,</span> <span class="nx">callback</span><span class="p">);</span>
+<span class="p">};</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * Repository commit</span>
+<span class="cm"> * @class github3</span>
+<span class="cm"> * @method getCommit</span>
+<span class="cm"> */</span>
+
+<span class="nx">github3</span><span class="p">.</span><span class="nx">getCommit</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">repo</span><span class="p">,</span><span class="nx">name</span><span class="p">,</span><span class="nx">sha</span><span class="p">,</span><span class="nx">callback</span><span class="p">)</span> <span class="p">{</span></pre></div>             </td>           </tr>                               <tr id="section-8">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-8">&#182;</a>               </div>               <p>/repos/{name}/{repo}/git/commits/{sha}</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="k">this</span><span class="p">.</span><span class="nx">_get</span><span class="p">(</span><span class="s1">&#39;/repos/&#39;</span><span class="o">+</span><span class="nx">name</span><span class="o">+</span><span class="s1">&#39;/&#39;</span><span class="o">+</span><span class="nx">repo</span><span class="o">+</span><span class="s1">&#39;/git/commits/&#39;</span><span class="o">+</span><span class="nx">sha</span><span class="p">,</span> <span class="nx">callback</span><span class="p">);</span>
+<span class="p">};</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * Repository tree</span>
+<span class="cm"> * @class github3</span>
+<span class="cm"> * @method getTree</span>
+<span class="cm"> */</span>
+
+<span class="nx">github3</span><span class="p">.</span><span class="nx">getTree</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">repo</span><span class="p">,</span><span class="nx">name</span><span class="p">,</span><span class="nx">sha</span><span class="p">,</span><span class="nx">callback</span><span class="p">)</span> <span class="p">{</span></pre></div>             </td>           </tr>                               <tr id="section-9">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-9">&#182;</a>               </div>               <p>/repos/{name}/{repo}/git/trees/{sha}</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="k">this</span><span class="p">.</span><span class="nx">_get</span><span class="p">(</span><span class="s1">&#39;/repos/&#39;</span><span class="o">+</span><span class="nx">name</span><span class="o">+</span><span class="s1">&#39;/&#39;</span><span class="o">+</span><span class="nx">repo</span><span class="o">+</span><span class="s1">&#39;/git/trees/&#39;</span><span class="o">+</span><span class="nx">sha</span><span class="p">,</span> <span class="nx">callback</span><span class="p">);</span>
+<span class="p">};</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * Repository blob</span>
+<span class="cm"> * @class github3</span>
+<span class="cm"> * @method getBlobText</span>
+<span class="cm"> */</span>
+
+<span class="nx">github3</span><span class="p">.</span><span class="nx">getBlobText</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">repo</span><span class="p">,</span><span class="nx">name</span><span class="p">,</span><span class="nx">sha</span><span class="p">,</span><span class="nx">callback</span><span class="p">)</span> <span class="p">{</span></pre></div>             </td>           </tr>                               <tr id="section-10">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-10">&#182;</a>               </div>               <p>/repos/{name}/{repo}/git/blobs/{sha}</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="k">this</span><span class="p">.</span><span class="nx">_get</span><span class="p">(</span><span class="s1">&#39;/repos/&#39;</span><span class="o">+</span><span class="nx">name</span><span class="o">+</span><span class="s1">&#39;/&#39;</span><span class="o">+</span><span class="nx">repo</span><span class="o">+</span><span class="s1">&#39;/git/blobs/&#39;</span><span class="o">+</span><span class="nx">sha</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">content</span> <span class="o">!==</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="nx">data</span><span class="p">.</span><span class="nx">encoding</span> <span class="o">===</span> <span class="s1">&#39;base64&#39;</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">data</span><span class="p">.</span><span class="nx">content</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Buffer</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">content</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="s1">&#39;\n&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">),</span> <span class="s1">&#39;base64&#39;</span><span class="p">).</span><span class="nx">toString</span><span class="p">(</span><span class="s1">&#39;utf8&#39;</span><span class="p">);</span>
+    <span class="p">}</span>  
+    <span class="nx">callback</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
+  <span class="p">});</span>
+<span class="p">};</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * Repository blob</span>
+<span class="cm"> * @class github3</span>
+<span class="cm"> * @method getBlobTextByName</span>
+<span class="cm"> */</span>
+
+<span class="nx">github3</span><span class="p">.</span><span class="nx">getBlobTextByFilePath</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">repo</span><span class="p">,</span><span class="nx">name</span><span class="p">,</span><span class="nx">path</span><span class="p">,</span><span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">getLastCommitRef</span><span class="p">(</span><span class="nx">repo</span><span class="p">,</span> <span class="nx">name</span><span class="p">,</span> <span class="s1">&#39;master&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">error</span> <span class="o">!==</span> <span class="kc">null</span><span class="p">)</span>
+        <span class="nx">callback</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="kc">null</span><span class="p">);</span>
+    
+    <span class="nx">self</span><span class="p">.</span><span class="nx">getCommit</span><span class="p">(</span><span class="nx">repo</span><span class="p">,</span> <span class="nx">name</span><span class="p">,</span> <span class="nx">data</span><span class="p">.</span><span class="nx">object</span><span class="p">.</span><span class="nx">sha</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">error</span> <span class="o">!==</span> <span class="kc">null</span><span class="p">)</span>
+            <span class="nx">callback</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="kc">null</span><span class="p">);</span>
+        
+        <span class="nx">self</span><span class="p">.</span><span class="nx">getTree</span><span class="p">(</span><span class="nx">repo</span><span class="p">,</span> <span class="nx">name</span><span class="p">,</span> <span class="nx">data</span><span class="p">.</span><span class="nx">tree</span><span class="p">.</span><span class="nx">sha</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">error</span> <span class="o">!==</span> <span class="kc">null</span><span class="p">)</span>
+                <span class="nx">callback</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="kc">null</span><span class="p">);</span>
+            
+            <span class="nx">data</span><span class="p">.</span><span class="nx">tree</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">item</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nx">item</span><span class="p">.</span><span class="nx">path</span> <span class="o">===</span> <span class="nx">path</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="nx">self</span><span class="p">.</span><span class="nx">getBlobText</span><span class="p">(</span><span class="nx">repo</span><span class="p">,</span> <span class="nx">name</span><span class="p">,</span> <span class="nx">item</span><span class="p">.</span><span class="nx">sha</span><span class="p">,</span> <span class="nx">callback</span><span class="p">);</span>
+                <span class="p">}</span>
+            <span class="p">});</span>
+        <span class="p">});</span>
+    <span class="p">});</span>
+  <span class="p">});</span>
+<span class="p">};</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * Repository Forks</span>
+<span class="cm"> * @class github3</span>
+<span class="cm"> * @method getForks</span>
+<span class="cm"> * @param {Functon} callback Method to execute on completion</span>
+<span class="cm"> */</span>
+
+<span class="nx">github3</span><span class="p">.</span><span class="nx">getForks</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">repo</span><span class="p">,</span> <span class="nx">name</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">_get</span><span class="p">(</span><span class="s1">&#39;/repos/&#39;</span><span class="o">+</span><span class="nx">name</span><span class="o">+</span><span class="s1">&#39;/&#39;</span><span class="o">+</span><span class="nx">repo</span><span class="o">+</span><span class="s1">&#39;/forks&#39;</span><span class="p">,</span><span class="nx">callback</span><span class="p">);</span>
+<span class="p">};</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * Repository Watchers</span>
+<span class="cm"> * @class github3</span>
+<span class="cm"> * @method getWatchers</span>
+<span class="cm"> * @param {Functon} callback Method to execute on completion</span>
+<span class="cm"> */</span>
+
+<span class="nx">github3</span><span class="p">.</span><span class="nx">getWatchers</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">repo</span><span class="p">,</span><span class="nx">name</span><span class="p">,</span><span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">_get</span><span class="p">(</span><span class="s1">&#39;/repos/&#39;</span><span class="o">+</span><span class="nx">name</span><span class="o">+</span><span class="s1">&#39;/&#39;</span><span class="o">+</span><span class="nx">repo</span><span class="o">+</span><span class="s1">&#39;/watchers&#39;</span><span class="p">,</span><span class="nx">callback</span><span class="p">);</span>
+<span class="p">};</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * Repository </span>
+<span class="cm"> * @class github3</span>
+<span class="cm"> * @method getRepository</span>
+<span class="cm"> * @param {Functon} callback Method to execute on completion</span>
+<span class="cm"> */</span>
+
+<span class="nx">github3</span><span class="p">.</span><span class="nx">getRepository</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">repo</span><span class="p">,</span> <span class="nx">name</span> <span class="p">,</span><span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">_get</span><span class="p">(</span><span class="s1">&#39;/repos/&#39;</span><span class="o">+</span><span class="nx">name</span><span class="o">+</span><span class="s1">&#39;/&#39;</span><span class="o">+</span><span class="nx">repo</span><span class="p">,</span><span class="nx">callback</span><span class="p">)</span>
+<span class="p">};</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * Retrieve repository labels</span>
+<span class="cm"> * @class github3</span>
+<span class="cm"> * @method getLabels</span>
+<span class="cm"> * @param {String} repo Repository Name</span>
+<span class="cm"> * @param {String} repository owner name</span>
+<span class="cm"> * @param {Functon} callback Method to execute on completion</span>
+<span class="cm"> */</span>
+
+<span class="nx">github3</span><span class="p">.</span><span class="nx">getLabels</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">repo</span><span class="p">,</span> <span class="nx">name</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">_get</span><span class="p">(</span><span class="s1">&#39;/repos/&#39;</span><span class="o">+</span><span class="nx">name</span><span class="o">+</span><span class="s1">&#39;/&#39;</span><span class="o">+</span><span class="nx">repo</span><span class="o">+</span><span class="s1">&#39;/labels&#39;</span><span class="p">,</span> <span class="nx">callback</span><span class="p">);</span>
+<span class="p">};</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * Retrieve labels on a repository issue by ID #</span>
+<span class="cm"> * @class github3</span>
+<span class="cm"> * @method getIssueLabels</span>
+<span class="cm"> * @param {String} repo Repository Name</span>
+<span class="cm"> * @param {String} repository owner name</span>
+<span class="cm"> * @param {Functon} callback Method to execute on completion</span>
+<span class="cm"> */</span>
+
+<span class="nx">github3</span><span class="p">.</span><span class="nx">getIssueLabels</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">repo</span><span class="p">,</span> <span class="nx">name</span><span class="p">,</span> <span class="nx">issueId</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">_get</span><span class="p">(</span><span class="s1">&#39;/repos/&#39;</span><span class="o">+</span><span class="nx">name</span><span class="o">+</span><span class="s1">&#39;/&#39;</span><span class="o">+</span><span class="nx">repo</span><span class="o">+</span><span class="s1">&#39;/issues/&#39;</span><span class="o">+</span><span class="nx">issueId</span><span class="o">+</span><span class="s1">&#39;/labels&#39;</span><span class="p">,</span> <span class="nx">callback</span><span class="p">);</span>
+<span class="p">};</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * Repository tree</span>
+<span class="cm"> * @class github3</span>
+<span class="cm"> * @method createTreeAndAddFile</span>
+<span class="cm"> */</span>
+
+<span class="nx">github3</span><span class="p">.</span><span class="nx">createTreeAndAddFile</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">repo</span><span class="p">,</span> <span class="nx">name</span><span class="p">,</span> <span class="nx">path</span><span class="p">,</span> <span class="nx">content</span><span class="p">,</span> <span class="nx">last_tree_sha</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">new_tree</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;base_tree&quot;</span> <span class="o">:</span> <span class="nx">last_tree_sha</span><span class="p">,</span>
+    <span class="s2">&quot;tree&quot;</span> <span class="o">:</span> <span class="p">[{</span><span class="s2">&quot;path&quot;</span> <span class="o">:</span> <span class="nx">path</span><span class="p">,</span> <span class="s2">&quot;mode&quot;</span> <span class="o">:</span> <span class="s2">&quot;100644&quot;</span><span class="p">,</span> <span class="s2">&quot;type&quot;</span> <span class="o">:</span> <span class="s2">&quot;blob&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="o">:</span> <span class="nx">content</span><span class="p">}]</span>
+  <span class="p">};</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">_post</span><span class="p">(</span><span class="s1">&#39;/repos/&#39;</span><span class="o">+</span><span class="nx">name</span><span class="o">+</span><span class="s1">&#39;/&#39;</span><span class="o">+</span><span class="nx">repo</span><span class="o">+</span><span class="s1">&#39;/git/trees&#39;</span><span class="p">,</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">new_tree</span><span class="p">),</span> <span class="nx">callback</span><span class="p">);</span>
+<span class="p">};</span>
+
+<span class="nx">github3</span><span class="p">.</span><span class="nx">createCommit</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">repo</span><span class="p">,</span> <span class="nx">name</span><span class="p">,</span> <span class="nx">message</span><span class="p">,</span> <span class="nx">tree_sha</span><span class="p">,</span> <span class="nx">parent_commit_sha</span><span class="p">,</span> <span class="nx">author</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">commit</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;message&#39;</span> <span class="o">:</span> <span class="nx">message</span><span class="p">,</span> <span class="s1">&#39;parents&#39;</span> <span class="o">:</span> <span class="p">[</span><span class="nx">parent_commit_sha</span><span class="p">],</span> <span class="s1">&#39;tree&#39;</span> <span class="o">:</span> <span class="nx">tree_sha</span><span class="p">,</span> <span class="s1">&#39;author&#39;</span> <span class="o">:</span> <span class="nx">author</span> <span class="p">};</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">_post</span><span class="p">(</span><span class="s1">&#39;/repos/&#39;</span><span class="o">+</span><span class="nx">name</span><span class="o">+</span><span class="s1">&#39;/&#39;</span><span class="o">+</span><span class="nx">repo</span><span class="o">+</span><span class="s1">&#39;/git/commits&#39;</span><span class="p">,</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">commit</span><span class="p">),</span> <span class="nx">callback</span><span class="p">);</span>
+<span class="p">};</span>
+
+<span class="nx">github3</span><span class="p">.</span><span class="nx">updateRefHead</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">repo</span><span class="p">,</span> <span class="nx">name</span><span class="p">,</span> <span class="nx">branch</span><span class="p">,</span> <span class="nx">commit_sha</span><span class="p">,</span> <span class="nx">force</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>    
+  <span class="kd">var</span> <span class="nx">ref</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;sha&#39;</span> <span class="o">:</span> <span class="nx">commit_sha</span><span class="p">,</span> <span class="s1">&#39;force&#39;</span> <span class="o">:</span> <span class="nx">force</span><span class="p">};</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">_post</span><span class="p">(</span><span class="s1">&#39;/repos/&#39;</span><span class="o">+</span><span class="nx">name</span><span class="o">+</span><span class="s1">&#39;/&#39;</span><span class="o">+</span><span class="nx">repo</span><span class="o">+</span><span class="s1">&#39;/git/refs/heads/&#39;</span><span class="o">+</span> <span class="nx">branch</span><span class="p">,</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">ref</span><span class="p">),</span> <span class="nx">callback</span><span class="p">);</span>
+<span class="p">};</span>
+
+<span class="cm">/* EOF */</span>
+
+</pre></div>             </td>           </tr>                </tbody>     </table>   </div> </body> </html> 
