@@ -26,6 +26,10 @@
   "devDependencies":{
     "vows":"0.6.2"
   },
+  "licenses":[{
+    "type":"MIT",
+    "url":"http://github.com/edwardhotchkiss/github3/LICENSE"
+  }],
   "scripts": {
     "test": "vows test/*.test.js --spec"
   }
