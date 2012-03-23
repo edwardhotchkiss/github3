@@ -1,9 +1,18 @@
 
+0.4.2 / 2012-03-22 
+==================
+
+  * [dist] version bump
+  * [license] added, linked in package
+  * [package] homepage, bugs
+  * [deps] bump request to 2.9.153
+  * [changelog] updated
+  * [docs](sweet)
+  * [paige] paige.config for doc building
+  
 0.4.1 / 2012-03-11 
 ==================
 
-  * [dist] bump
-  * [docs](sweet)
   * [paige] paige.config for doc building
   * [formating] comments and style
   * [engine] prep for 0.8.0, require 0.6.12+
