@@ -7,11 +7,15 @@
     { "name": "@dolphin278", "github": "https://github.com/dolphin278" },
     { "name": "Matias Woloski", "github":"https://github.com/woloski" }
   ],
+  "homepage": "http://github.com/edwardhotchkiss/github3",
   "description": "NodeJS GitHub API (v3) Wrapper",
   "version": "0.4.1",
   "repository": {
     "type": "git",
     "url": "git://github.com/edwardhotchkiss/github3.git"
+  },
+  "bugs": {
+    "url": "https://github.com/edwardhotchkiss/github3/issues"
   },
   "keywords": ["github", "api", "wrapper", "git", "3"],
   "main": "./lib/github3",
