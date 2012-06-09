@@ -1,4 +1,11 @@
 
+0.4.3 / 2012-06-09 
+==================
+
+  * [contributors] added @tjmehta
+  * [tests] update tests for pull request #10
+  * Merge pull request #12 from tjmehta/master
+  
 0.4.2 / 2012-03-22 
 ==================
 

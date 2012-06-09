@@ -10,7 +10,7 @@
   ],
   "homepage": "http://github.com/edwardhotchkiss/github3",
   "description": "NodeJS GitHub API (v3) Wrapper",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "repository": {
     "type": "git",
     "url": "git://github.com/edwardhotchkiss/github3.git"
