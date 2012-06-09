@@ -9,10 +9,10 @@ vows.describe('api tests').addBatch({
   // isFunction
   'when instantiating github3':{
     topic:function(){
-      return github3;
+      return new github3();
     },
-    'github3 should be a function':function(topic) {
-      assert.equal(typeof(topic), 'function');
+    'github3 should be an instantiable object':function(topic) {
+      assert.equal(typeof(topic), 'object');
     }
   },
 
