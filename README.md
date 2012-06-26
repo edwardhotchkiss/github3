@@ -1,5 +1,5 @@
 
-# GitHub 3 [![Build Status](https://secure.travis-ci.org/edwardhotchkiss/github3.png)](http://travis-ci.org/edwardhotchkiss/github3)
+# github 3 [![Build Status](https://secure.travis-ci.org/edwardhotchkiss/github3.png)](http://travis-ci.org/edwardhotchkiss/github3)
 
 > Node.JS GitHub API (v3) Wrapper
 
