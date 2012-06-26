@@ -1,4 +1,12 @@
 
+0.4.4 / 2012-06-26 
+==================
+
+  * [docs] minor
+  * [node] only require 0.6.0+
+  * [travis] test 0.8.0
+  * [package] updated email
+
 0.4.3 / 2012-06-09 
 ==================
 
