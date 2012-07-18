@@ -1,4 +1,15 @@
 
+0.4.5 / 2012-07-17 
+==================
+
+  * [tests] minor formating
+  * [docs] minor fix
+  * [contributors] added @wemotom
+  * [minor] removed npmignore, pointless these things?
+  * [docs] removed paige
+  * Merge pull request #13 from wemotom/master
+  * README: fixed buggy example code in README.md
+
 0.4.4 / 2012-06-26 
 ==================
 
