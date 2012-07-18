@@ -16,7 +16,7 @@ $ npm install github3
 var github3 = require('github3');
 
 // get user information
-github3.getUser(user, function('edwardhotchkiss', user) {
+github3.getUser('edwardhotchkiss', function(error, user) {
   console.log(user);
 });
 
@@ -32,7 +32,7 @@ github3.getUsersWatched('edwardhotchkiss', function(error, watched) {
 
 // get an organizations github users
 github3.getOrgMembers('github', function(error, members) {
-  console.log('members');
+  console.log(members);
 });
 
 ```
