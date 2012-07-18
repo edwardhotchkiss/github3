@@ -6,7 +6,8 @@
     { "name": "Mark Lussier", "github": "https://github.com/intabulas" },
     { "name": "@dolphin278", "github": "https://github.com/dolphin278" },
     { "name": "Matias Woloski", "github":"https://github.com/woloski" },
-    { "name": "Tejesh Mehta", "github": "https://github.com/tjmehta" }
+    { "name": "Tejesh Mehta", "github": "https://github.com/tjmehta" },
+    { "name": "wemotom", "github": "https://github.com/wemotom" }
   ],
   "homepage": "http://github.com/edwardhotchkiss/github3",
   "description": "NodeJS GitHub API (v3) Wrapper",
