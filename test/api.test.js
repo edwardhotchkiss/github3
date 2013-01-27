@@ -364,6 +364,34 @@ vows.describe('api tests').addBatch({
       assert.isNull(error);
       assert.equal(typeof(data), 'object');
     }
+  },
+  
+  // starRepository
+  'when starring a repo(':{
+    topic:function(){
+      var self = this;
+      github3.username = 'githubapi-test';
+      github3.password = 'Passw0rd!'; 
+      github3.starRepository('githubapi-testrepo','githubapi-test', self.callback);
+    },
+    'we should receive back no errors, and a 204 No Content reponse': function (error, data){
+      assert.isNull(error);
+      assert.equal(data, '204 No Content')
+    }
+  },
+  
+  // unstarRepository
+  'when unstarring a repo(':{
+    topic:function(){
+      var self = this;
+      github3.username = 'githubapi-test';
+      github3.password = 'Passw0rd!'; 
+      github3.unstarRepository('githubapi-testrepo','githubapi-test', self.callback);
+    },
+    'we should receive back no errors, and a 204 No Content reponse': function (error, data){
+      assert.isNull(error);
+      assert.equal(data, '204 No Content')
+    }
   }
   
 }).export(module);
