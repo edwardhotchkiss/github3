@@ -11,7 +11,7 @@
     { "name": "Luke Arduini", "github": "https://github.com/st-luke" }
   ],
   "homepage": "http://github.com/edwardhotchkiss/github3",
-  "description": "NodeJS GitHub API (v3) Wrapper",
+  "description": "Node.js GitHub API (v3) Wrapper",
   "version": "0.4.5",
   "repository": {
     "type": "git",
