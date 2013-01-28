@@ -205,7 +205,7 @@ vows.describe('api tests').addBatch({
     'we should receive no errors, and data back':function(error, data) {
       assert.equal(error, null);      
       assert.equal(typeof(data), 'object');
-      assert.equal(data.message, 'second commit\n');
+      assert.equal(data.message, 'second commit');
       assert.equal(data.sha, '926a49e2ca29ec3f31c990e55134d5ac5cce1ec3');
       assert.equal(data.tree.sha, '07c74bb3dc6e074b95d1293ddbc64543eef6b14b');
     }
