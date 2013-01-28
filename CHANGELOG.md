@@ -1,4 +1,19 @@
 
+1.0.0 / 2013-01-27 
+==================
+
+  * [dist] version bump
+  * [tests] updated, all passing
+  * [minor] style in package.json
+  * [license] updated year
+  * [minor] comment stylization
+  * [package] bump `vows` to `0.7.0`
+  * [package] bump `request` to `2.12.0
+  * [package] added @st-luke to contributors
+  * [travis, test] >= 0.8.0
+  * Merge pull request #15 from st-luke/master
+  * Add methods to start & unstar repos (w/ tests)
+
 0.4.5 / 2012-07-17 
 ==================
 
