@@ -1,4 +1,12 @@
 
+1.1.0 / 2013-07-02 
+==================
+
+ * [dist] version bump
+ * [contrib] added @mloar
+ * Merge pull request #16 from mloar/master
+ * Include User-Agent as required by GitHub. http://developer.github.com/v3/#user-agent-required
+
 1.0.0 / 2013-01-27 
 ==================
 
