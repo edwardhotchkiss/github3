@@ -8,7 +8,8 @@
     { "name": "Matias Woloski", "github":"https://github.com/woloski" },
     { "name": "Tejesh Mehta", "github": "https://github.com/tjmehta" },
     { "name": "wemotom", "github": "https://github.com/wemotom" },
-    { "name": "Luke Arduini", "github": "https://github.com/st-luke" }
+    { "name": "Luke Arduini", "github": "https://github.com/st-luke" },
+    { "name": "Matt Loar", "github": "https://github.com/mloar" }
   ],
   "homepage": "http://github.com/edwardhotchkiss/github3",
   "description": "Node.js GitHub API (v3) Wrapper",
