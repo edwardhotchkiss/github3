@@ -257,7 +257,7 @@ vows.describe('api tests').addBatch({
       github3.username = 'githubapi-test';
       github3.password = 'Passw0rd!';
       var self = this;
-      github3.createBlob('githubapi-testrepo','githubapi-test', 'some content', function(error, data) {
+      github3.createBlob('githubapi-testrepo','githubapi-test', new Buffer('some content', 'utf8'), function(error, data) {
         if (error !== null) {
           self.callback(error, null);
         };
