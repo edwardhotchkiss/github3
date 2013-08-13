@@ -56,8 +56,9 @@ Copyright (c) 2011, Edward Hotchkiss.
 
 **
 
-### Author: [Edward Hotchkiss][0]
-### Contributors: [Mark Lussier][1], [@dolphin278][2], [Matias Woloski][3], [Tejesh Mehta][4] & [wemotom][5]
+Author: [Edward Hotchkiss][0]
+
+Contributors: [Mark Lussier][1], [@dolphin278][2], [Matias Woloski][3], [Tejesh Mehta][4], [wemotom][5] & [Matt Loar][6]
  
 [0]: http://github.com/edwardhotchkiss/
 [1]: https://github.com/intabulas/
@@ -65,4 +66,5 @@ Copyright (c) 2011, Edward Hotchkiss.
 [3]: https://github.com/woloski/
 [4]: https://github.com/tjmehta/
 [5]: https://github.com/wemotom/
+[6]: https://github.com/mloar/
 
