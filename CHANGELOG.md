@@ -1,4 +1,15 @@
 
+1.2.0 / 2013-08-12 
+==================
+
+ * [node, travis, test] added v0.10.x for to travis
+ * [contrib] added @mloar to README as a contributor
+ * [minor] format
+ * Merge pull request #17 from mloar/create-blob
+ * Make createBlob() take a Buffer.
+ * Add methods for creating trees with base64 blobs.
+ * [changelog] updated
+
 1.1.0 / 2013-07-02 
 ==================
 
