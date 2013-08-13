@@ -250,6 +250,30 @@ vows.describe('api tests').addBatch({
       assert.equal(data.content, '# test readme\n\nthis is a markdown file');
     }
   },
+
+  // createTreeWithBlob
+  'when creating a tree with a blob(githubapi-testrepo,githubapi-test,':{
+    topic:function(){
+      github3.username = 'githubapi-test';
+      github3.password = 'Passw0rd!';
+      var self = this;
+      github3.createBlob('githubapi-testrepo','githubapi-test', new Buffer('some content', 'utf8'), function(error, data) {
+        if (error !== null) {
+          self.callback(error, null);
+        };
+        github3.createTreeWithBlob('githubapi-testrepo','githubapi-test', 'new-file.txt', data.sha, '07c74bb3dc6e074b95d1293ddbc64543eef6b14b', self.callback);
+      });
+    },
+    'we should receive no errors, and data back':function(error, data) {
+      assert.equal(error, null);    
+      github3.getTree('githubapi-testrepo','woloski', data.sha, function(error, data) {
+        assert.equal(error, null);      
+        assert.equal(typeof(data), 'object');
+        assert.equal(data.tree.length, 3);
+        assert.equal(data.tree[data.tree.length-1].path, 'new-file.txt');
+      }); 
+    }
+  },
   
   // createTreeAndAddFile
   'when creating a tree with a file(githubapi-testrepo,githubapi-test,':{
