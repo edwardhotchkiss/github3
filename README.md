@@ -68,3 +68,7 @@ Contributors: [Mark Lussier][1], [@dolphin278][2], [Matias Woloski][3], [Tejesh 
 [5]: https://github.com/wemotom/
 [6]: https://github.com/mloar/
 
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/edwardhotchkiss/github3/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
